@@ -6,7 +6,8 @@ import random
 
 class Game:
     def __init__(self, windowX, windowY):
-        pygame.init()   
+        pygame.init() 
+        pygame.display.set_caption("Flipper") 
         self.gridX = 2
         self.gridY = 2
         self.windowX = windowX
@@ -14,7 +15,7 @@ class Game:
         self.screen = pygame.display.set_mode((windowX, windowY))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.startingCellColor = (200,200,50)
+        self.startingCellColor = (40,40,150)
         self.cellWinColor = (40,150,40)
         self.background = (25,25,25)
         self.cellColor = self.startingCellColor
@@ -68,6 +69,7 @@ class Game:
             self.clock.tick(165)
             self.update()
             pygame.display.flip()
+        self.soundPlayer("click_loose.wav")
 
     def flip(self, x, y):
         #invert cells
@@ -86,11 +88,9 @@ class Game:
         self.updateGrid()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.soundPlayer("click_loose.wav")
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.soundPlayer("click_loose.wav")
                     self.running = False
                 if event.key == pygame.K_UP:
                     self.increaseGrid()
@@ -128,11 +128,12 @@ class Game:
                 if self.grid[x][y] == 1:
                     pygame.draw.rect(self.screen, self.cellColor, (x*self.windowX/self.gridX, y*self.windowY/self.gridY, self.windowX/self.gridX, self.windowY/self.gridY))
 
+        self.lineThickness = (self.windowX)/100
         for x in range(self.gridX+1): #vertical lines 6px wide with offset
-            pygame.draw.rect(self.screen, self.lineColor, ((x*self.windowX/self.gridX)-3, 0, 6, self.windowY))
+            pygame.draw.rect(self.screen, self.lineColor, ((x*self.windowX/self.gridX)-(self.lineThickness/2), 0, self.lineThickness, self.windowY))
 
         for y in range(self.gridY+1): #horizontal lines 6px wide with offset
-            pygame.draw.rect(self.screen, self.lineColor, (0, (y*self.windowY/self.gridY)-3, self.windowX, 6))
+            pygame.draw.rect(self.screen, self.lineColor, (0, (y*self.windowY/self.gridY)-(self.lineThickness/2), self.windowX, self.lineThickness))
 
     def getCellState(self, x, y):
         return self.grid[x][y]
@@ -147,7 +148,7 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(400, 400)
+    game = Game(300, 300)
 
 
 
