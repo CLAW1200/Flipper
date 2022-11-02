@@ -42,7 +42,6 @@ class Game:
                     self.start()
                     return
 
-
     def soundPlayer(self, sound):
         pygame.mixer.Sound.play(pygame.mixer.Sound(sound))
 
@@ -72,6 +71,7 @@ class Game:
 
     def flip(self, x, y):
         #invert cell
+        self.soundPlayer("click_low.wav")
         self.flipCellState(x, y)
         self.flipCellState(x+1, y)
         self.flipCellState(x-1, y)
@@ -85,9 +85,11 @@ class Game:
         self.updateGrid()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.soundPlayer("click_loose.wav")
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    self.soundPlayer("click_loose.wav")
                     self.running = False
                 if event.key == pygame.K_UP:
                     self.increaseGrid()
@@ -95,7 +97,6 @@ class Game:
                     self.decreaseGrid()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    self.soundPlayer("click_low.wav")
                     mousePos = pygame.mouse.get_pos()
                     x = int(mousePos[0]//(self.windowX/self.gridX))
                     y = int(mousePos[1]//(self.windowY/self.gridY))
@@ -117,7 +118,7 @@ class Game:
     def randomizeGrid(self):
         for x in range(self.gridX):
             for y in range(self.gridY):
-                self.grid[x][y] = 0
+                self.grid[x][y] = random.randint(0,1)
 
     def updateGrid(self):
         self.screen.fill(self.background)
@@ -136,6 +137,7 @@ class Game:
         return self.grid[x][y]
 
     def flipCellState(self, x, y):
+        
         if x >= 0 and x < self.gridX and y >= 0 and y < self.gridY:
             if self.grid[x][y] == 1:
                 self.grid[x][y] = 0
