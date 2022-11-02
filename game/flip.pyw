@@ -70,18 +70,19 @@ class Game:
             pygame.display.flip()
 
     def flip(self, x, y):
-        #invert cell
-        self.soundPlayer("click_low.wav")
+        #invert cells
         self.flipCellState(x, y)
         self.flipCellState(x+1, y)
         self.flipCellState(x-1, y)
         self.flipCellState(x, y+1)
         self.flipCellState(x, y-1)
+        if self.checkWin():
+            self.userWon()
+        else:
+            self.soundPlayer("click_low.wav")
         
 
     def update(self):
-        if self.checkWin():
-            self.userWon()
         self.updateGrid()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -146,7 +147,7 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(800, 800)
+    game = Game(400, 400)
 
 
 
